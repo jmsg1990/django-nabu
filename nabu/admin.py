@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.conf import settings
+from django.forms.utils import ErrorList
 
 from .models import Ruleset, Rule, Action
 
@@ -22,31 +23,33 @@ class RulesetAdmin(admin.ModelAdmin):
 
 class PolymorphicWidget(forms.widgets.Textarea):
 
-    def __init__(self, instance, **kwargs):
-        print instance
-        super(PolymorphicWidget, self).__init__(**kwargs)
+    def render(self, name, value, attrs=None, choices=()):
+        
+        attrs['ng-model'] = "nabuGetterSetter"
+        attrs['ng-model-options'] = "{ getterSetter: true }"
+        attrs['ng-hide'] = "true"
 
-    def render(self, name, value, attrs=None, choices=(), context={}):
-        print attrs, context
         output = ''
         output += '<script>window.nabuData = \'%s\';</script>' % (value if value else '',)
         output += '<script>window.staticRoot = \'%s\';</script>' % (settings.STATIC_URL, )
         output += '<section ng-app="nabuAdmin">'
-        output +=   '<div id="%s" ng-controller="nabuEditor"></div>' % (name,)
-        output +=       '<div nabu-form></div>'
+        output +=   '<div id="%s" ng-controller="nabuEditor">' % (name,)
+        output +=       '<div nabu-form nabu-data="nabuData"></div>'
+        output +=       super(PolymorphicWidget, self).render(name, value, attrs)
         output +=   '</div>'
         output += '</section>'
         return mark_safe(''.join(output))
 
 class ActionForm(forms.ModelForm):
 
-    def __init__(self, **kwargs):
-        super(ActionForm, self).__init__(**kwargs)
-        self.fields['data'].widget = PolymorphicWidget(kwargs.get('instance'))
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None, initial=None, error_class=ErrorList, label_suffix=None, empty_permitted=False, instance=None):
+        super(ActionForm, self).__init__(data, files, auto_id, prefix, initial, error_class, label_suffix, empty_permitted, instance)
+        self.fields['data'].widget = PolymorphicWidget()
     
     class Meta:
         model = Action
         fields = '__all__'
+        exclude = ('counter', )
         #widgets = {
         #    'data': PolymorphicWidget(),
         #}
@@ -57,5 +60,7 @@ class ActionAdmin(admin.ModelAdmin):
     form = ActionForm
 
     class Media:
-        css = {}
+        css = {
+            'all': ('css/nabu-admin.css',) 
+        }
         js = ('https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js', 'js/nabu-django-admin.js')

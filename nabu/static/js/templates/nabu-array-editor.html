@@ -1,0 +1,14 @@
+<div>
+  <div class="email-list-wrapper">
+    <div class="email-list" ng-repeat="list in model track by $index">
+      <div  class="email-item" ng-repeat="item in list track by $index">
+        <input type="text" ng-model="model[$parent.$index][$index]" />
+        <a href="#" ng-click="removeItem($parent.$index, $index)">x</a>
+      </div>
+      <a href="#" ng-click="addNewItem($index)">Add recipient (+)</a>
+    </div>
+  </div>
+  <div class="email-add-list">
+    <a href="#" ng-click="addNewList()">Add list (+)</a>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 from .base import BaseProvider
-from ..backends.email.simple import SimpleEmailBackend
+from ..backends.email.django_backend import DjangoEmailBackend
 
 from django.template import Context, Template
 
@@ -20,12 +20,12 @@ class EmailProvider(BaseProvider):
 
         self.context = ctx
 
-        self.backend = self.data.pop('backend', SimpleEmailBackend)
-
-        self.init_backend();
+        self.backend = self.data.pop('backend', DjangoEmailBackend)
     
     def get_recipients(self):
-        return self.recipients
+        if hasattr(self, 'action_counter'):
+            return self.recipients[self.action_counter % len(self.recipients)]
+        return self.recipients[0]
 
     def get_sender(self):
         return self.sender
@@ -54,7 +54,13 @@ class EmailProvider(BaseProvider):
         return self.backend_instance
 
     def send_email(self):
+        self.init_backend();
         self.backend_instance.send();
 
-    def execute(self, **kwargs):
+    def execute(self, nabuAction, **kwargs):
+        self.action_counter = nabuAction.counter
+        
+        nabuAction.counter += 1
+        nabuAction.save();
+
         return self.send_email(**kwargs)

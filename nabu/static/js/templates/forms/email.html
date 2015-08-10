@@ -1,0 +1,22 @@
+<div class="email-editor">
+  <div class="item">
+    <label>Subject</label>
+    <input ng-model="nabuData.subject" />
+  </div>
+
+  <div class="item">
+    <label>From:</label>
+    <input ng-model="nabuData.sender" />
+  </div>
+
+  <div class="item">
+    <label>Recipients</label>
+    <div model="nabuData.recipients" nabu-array-editor></div>
+  </div>
+
+  <div class="item">
+    <label>Text</label>
+    <textarea ng-model="nabuData.body"></textarea>
+  </div>
+
+</div>

@@ -95,6 +95,8 @@ class Action(models.Model):
     name = models.CharField(max_length=140)
     data = models.TextField()
 
+    counter = models.BigIntegerField(default=0)
+
     def get_data(self):
         return json.loads(self.data)
 
@@ -102,7 +104,7 @@ class Action(models.Model):
         return providers.get_providers_instance(self.provider, self.get_data(), ctx)
 
     def execute(self, ctx):
-        return self.get_provider(ctx).execute()
+        return self.get_provider(ctx).execute(self)
 
     def __unicode__(self):
         return self.name

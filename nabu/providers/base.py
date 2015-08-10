@@ -11,7 +11,7 @@ class BaseProvider(object, RegistryMixin):
     def get_data(self):
         return self.data
 
-    def execute(self):
+    def execute(self, nabuAction):
         """
         This method is the entry point for the providers
         """

@@ -1,0 +1,29 @@
+[ng-controller="nabuEditor"] {
+  clear: both;
+  margin-left: 10em;
+}
+
+[ng-controller="nabuEditor"] [nabu-array-editor] {
+  display: inline-block;
+}
+
+[ng-controller="nabuEditor"] .email-editor .item {
+  margin-bottom: 0.5em;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5em;
+}
+
+[ng-controller="nabuEditor"] .email-editor .email-list-wrapper {
+  margin-bottom: 1em;
+  overflow: hidden;
+}
+
+[ng-controller="nabuEditor"] .email-editor .email-list {
+  float: left;
+  margin-right: 2em;
+}
+
+[ng-controller="nabuEditor"] .email-editor .email-add-list {
+  clear: both;
+  float: none;
+}
