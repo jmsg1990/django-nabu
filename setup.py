@@ -55,7 +55,7 @@ setup(
     # simple. Or you can use find_packages().
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
 
-    include_package_data=True
+    include_package_data=True,
     package_data={'nabu': ['static/*']},
 
     # List run-time dependencies here.  These will be installed by pip when
