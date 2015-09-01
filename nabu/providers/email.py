@@ -32,7 +32,7 @@ class EmailProvider(BaseProvider):
 
     def get_email_body(self):
         template = Template(self.body)
-        context = Context({"ctx": self.context })
+        context = Context({"object": self.context })
         return template.render(context)
 
     def get_subject(self):

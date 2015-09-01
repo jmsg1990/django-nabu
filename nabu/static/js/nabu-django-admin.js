@@ -3,7 +3,7 @@ var staticRoot = window.staticRoot ? window.staticRoot : '';
 angular.module('nabuAdmin', [])
   .controller('nabuEditor', ['$scope', function($scope) {
 
-    $scope.nabuData = window.nabuData ? JSON.parse(window.nabuData) : {}
+    $scope.nabuData = window.nabuData ? JSON.parse(window.nabuData.replace(/\n/g, '\\n')) : {}
 
     $scope.nabuGetterSetter = function(value) {
       // Don't set anything just return the serialized value
